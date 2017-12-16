@@ -1,4 +1,4 @@
-#My first Blog App
+## My first Blog App
 
 >Small blog that demonstrates REST routes
 
@@ -16,3 +16,4 @@ _Tools Used:_ Semantic UI, Node.js, Express, MongoDB, Mongoose, EJS, REST routes
 ![NEW Route](https://raw.githubusercontent.com/cecdelr/ColtSteele_WebDevCourse/master/Projects/RESTfulBlog/screenshots/img3.png)
 ###Responsive SHOW Route
 ![Responsive SHOW Route](https://raw.githubusercontent.com/cecdelr/ColtSteele_WebDevCourse/master/Projects/RESTfulBlog/screenshots/img4.png) -->
+

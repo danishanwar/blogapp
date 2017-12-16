@@ -144,7 +144,8 @@ app.get("/register", function(req, res){
 app.post("/register", function(req, res){
     User.register(new User({username: req.body.username}), req.body.password, function(err, user){
         if(err){
-            res.send(err);
+            res.render("alert");
+            console.log(err);
             return res.render("register");
         }
         passport.authenticate("local")(req, res, function(){
@@ -174,6 +175,12 @@ app.get("/logout", function(req, res){
     req.logout();
     res.redirect("/")
 });
+
+app.get("/about", function(req, res){
+	res.render("about");
+	res.send("about page")
+});
+
 
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
