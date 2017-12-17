@@ -101,18 +101,14 @@ app.get("/blogs/:id", function(req, res){
 });
 
 //EDIT ROUTE
-app.get("/blogs/:id/edit", function(req, res){
+app.get("/blogs/:id/edit", checkBlogOwnership, function(req, res){
 	Blog.findById(req.params.id, function(err, foundBlog){
-		if(err){
-			res.redirect("/");
-		} else {
-			res.render("edit", {blog: foundBlog});
-		}
+		res.render("edit", {blog: foundBlog});
 	});
 });
 
 //UPDATE ROUTE
-app.put("/blogs/:id", function(req, res){
+app.put("/blogs/:id", checkBlogOwnership, function(req, res){
 	req.body.blog.body = req.sanitize(req.body.blog.body);
 	Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, updatedBlog){
 		if(err){
@@ -124,7 +120,7 @@ app.put("/blogs/:id", function(req, res){
 });
 
 //DELETE ROUTE
-app.delete("/blogs/:id", function(req, res){
+app.delete("/blogs/:id", checkBlogOwnership, function(req, res){
 	//destroy blog
 	Blog.findByIdAndRemove(req.params.id, function(err){
 		if(err){
@@ -132,9 +128,8 @@ app.delete("/blogs/:id", function(req, res){
 		} else{
 			res.redirect("/blogs");
 		}
-	})
-	//redirect somewhere
-})
+	});
+});
 
 app.get("/register", function(req, res){
     res.render("register");
@@ -186,10 +181,28 @@ function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
         return next();
     }
-    res.redirect("/login");
+    res.render("loginalert");
+}
+
+function checkBlogOwnership(req, res, next){
+	if(req.isAuthenticated()){
+		Blog.findById(req.params.id, function(err, foundBlog){
+			if(err){
+				res.redirect("back");
+			} else {
+				if(foundBlog.author.id.equals(req.user._id)){
+					next();
+				} else {
+					res.redirect("back");
+				}
+			}
+		});
+	} else {
+		res.redirect("back");
+	}
 }
 
 
-app.listen(8080, function(){
-    console.log("Blog server has Started on Port 8080\nVisit http://localhost:8080/ to see!!!");
+app.listen(4000, function(){
+    console.log("Blog server has Started on Port 4000\nVisit http://localhost:4000/ to see!!!");
 });
